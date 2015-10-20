@@ -114,7 +114,7 @@
     var rect2 = new fabric.Rect({
     left: eDownX,
     top: eDownY,
-    fill: 'red',
+    fill: 'blue',
     opacity: 0.65,
     width: widthRenderFigure,
     height: heightRenderFigure

@@ -54,7 +54,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   |               | sidebar-mini                            |
   |---------------------------------------------------------|
   -->
-  <body class="skin-blue sidebar-mini">
+  <body class="skin-blue sidebar-mini fixed">
     <div class="wrapper">
 
       <!-- Main Header -->
@@ -240,20 +240,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <ul class="sidebar-menu">
             <li class="header">Инструменты</li>
             <!-- Optionally, you can article icons to the links -->
-            <li>
-              <a href="#"><i class="fa fa-crop"></i> <span>Выделение</span></a>
+            <li id="selection-tool">
+              <a  href="#"><i class="fa fa-crop"></i> <span>Выделение</span></a>
             </li>
-            <li>
-              <a href="#"><i class="fa fa-square"></i> <span>Квадрат</span> </a>
+            <li id="square-tool">
+              <a  href="#"><i class="fa fa-square"></i> <span>Квадрат</span> </a>
             </li>
-            <li>
-              <a href="#"><i class="fa fa-circle"></i> <span>Круг</span> </a>
+            <li id="circle-tool">
+              <a  href="#"><i class="fa fa-circle"></i> <span>Круг</span> </a>
             </li>
-            <li>
-              <a href="#"><i class="fa fa-exclamation-triangle"></i> <span>Треугольник</span> </a>
+            <li id="triangle-tool">
+              <a  href="#"><i class="fa fa-exclamation-triangle"></i> <span>Треугольник</span> </a>
             </li>
-            <li>
-              <a href="#"><i class="fa fa-pencil"></i> <span>Ломаная</span> </a>
+            <li id="broken-tool">
+              <a  href="#"><i class="fa fa-pencil"></i> <span>Ломаная</span> </a>
             </li>
           </ul><!-- /.sidebar-menu -->
           <!-- Sidebar Menu 2 -->
@@ -374,6 +374,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('/assets/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('/assets/dist/js/app.min.js') }}" type="text/javascript"></script>
+    <!-- slimscroll -->
+    <script src="{{ asset('/assets/plugins/slimScroll/jquery.slimscroll.js') }}" type="text/javascript"></script>
+
 
     <script>
         $(function () {

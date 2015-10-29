@@ -55,4 +55,6 @@ select.parsley-error {
 /* \Client Validation plugin parsleyjs styles */
 #cMain{
     overflow: scroll;
+    width: 700px;
+    height: 525px;
 }

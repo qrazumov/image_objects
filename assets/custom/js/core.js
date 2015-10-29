@@ -22,6 +22,8 @@
         // обработка отпуска кнопки мыши, ядро метода
         canvas.on('mouse:up', function(options) {
 
+console.log(canvas.getActiveObject());
+console.log(canvas.getActiveGroup());
             eUpX = options.e.offsetX;
             eUpY = options.e.offsetY;
 
@@ -56,7 +58,8 @@
                     fill: 'red',
                     opacity: 0.65,
                     width: widthRenderFigure,
-                    height: heightRenderFigure
+                    height: heightRenderFigure,
+                    text: 'test text'
 
                     // text: 'test text'
                 });
@@ -164,8 +167,8 @@
     var xx = $('#cMain').append('<canvas id="c" width="'+ wImg +'" height="'+ hImg +'"></canvas>');
     var zz = $('#cMain').css({
 
-    width: wImg + 'px',
-    height: hImg + 'px',
+    //width: wImg + 'px',
+    //height: hImg + 'px',
     margin: '0px auto',
     border: '1px solid red'
 
@@ -174,9 +177,100 @@
     canvas = new fabric.Canvas('c');
     canvas.setBackgroundImage(img.src, canvas.renderAll.bind(canvas));
 
-    canvas.on('object:selected', function(options) {
-        console.log('object:selected | ' + options); // все свойства объекта...
+    // обработчик добавления объекта
+    canvas.on('object:added', function(options) {
+        console.log('object:added | ' + options.target); // все свойства объекта...
+        options.target.fill = '#17b76a';
+        console.log(options); // все свойства объекта...
+        var scope = options.target; // объект области
+
+        // очистить, если была другая область
+        var clearOldScopeDom = $('#parametrsScope').children().remove();
+
+        var form_group = $('<div/>', {
+            id:     '',
+            class:  'form-group'
+
+        });
+        $('#parametrsScope').append(form_group);
+
+            var label = $('<label/>', {
+                id:     '',
+                for:  'nameScope',
+                text:  'Имя области:*'
+            });
+            $(form_group).append(label);
+            var input = $('<input/>', {
+                type:     'text',
+                class:     'form-control',
+                id:     'nameScope',
+                placeholder:     'Введите имя области'
+            });
+            $(form_group).append(input);
+            // установили значение инпата
+            input.val(scope.name);
+
+        // обработчик изменения имени области
+        $('#nameScope').on('input', function(event) {
+            console.log("change");
+            console.log(event.target.value);
+
+            var value = event.target.value;
+
+            scope.name = value;
+            console.log(canvas._objects);
+        });
+        //<div class="form-group">
+        //    <label for="nameScope">Имя области:*</label>
+        //    <input type="text" class="form-control" id="nameScope" placeholder="Введите имя области">
+        //    </div>
+        //
+        //    <div class="form-group">
+        //        <label>Цвет области:</label>
+        //        <div id="colorPickerScope" class="input-group colorpicker-element">
+        //            <div class="input-group-addon">
+        //                <i style="background-color: rgb(23, 183, 106);"></i>
+        //            </div>
+        //            <input type="text" class="form-control">
+        //            </div>
+        //            <!-- /.input group -->
+        //        </div>
+        //
+        //        <div class="form-group">
+        //            <label>Прикрепить файлы к области:</label>
+        //            <a class="btn btn-app" data-toggle="modal" data-target="#myModal">
+        //                <i class="fa fa-edit"></i> + Изображение
+        //            </a>
+        //            <a class="btn btn-app">
+        //                <i class="fa fa-edit"></i> + Текст
+        //            </a>
+        //            <a class="btn btn-app">
+        //                <i class="fa fa-edit"></i> + Файл
+        //            </a>
+        //        </div>
+
+
+
+
     });
+
+        // обработчик selected объекта
+        canvas.on('object:selected', function(options) {
+            $('#nameScope').off('input');
+            console.log('object:selected | ' + options.target); // все свойства объекта...
+           // options.target.fill = '#17b76a';
+           // console.log(options); // все свойства объекта...
+            var scope = options.target; // объект области
+
+            //// очистить, если была другая область
+            //var clearOldScopeDom = $('#parametrsScope').children().remove();
+
+            var name = options.target.name;
+            var input = $('#nameScope');
+            input.val(scope.name);
+
+        });
+
 
     };
 
@@ -185,6 +279,8 @@
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // здесь пишем стили и настройки плагинов
 
     $.contextMenu({
         // define which elements trigger this menu
@@ -197,7 +293,101 @@
         // there's more, have a look at the demos and docs...
     });
 
+    // колорпикер
+    $("#colorPickerScope").colorpicker();
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //
+    var inputFiles = document.getElementById('filesObjects');
+
+        inputFiles.onchange = function(e) { // событие выбор картинки
+
+            console.log("fileimageloaded");
+            //console.log(event);
+            var input = document.getElementById('filesObjects').files;
+            var issetObjects = canvas._objects;
+            console.log(issetObjects);
+
+            for(var i = 0; i < input.length; i++){
+
+                var form_group = $('<div/>', {
+                    id:     '',
+                    class:  'form-group row'
+                });
+                $('#insideInsertObject').append(form_group);
+
+                var col_lg_3 = $('<div/>', {
+                    id:     '',
+                    class:  'col-lg-3',
+                    text: input[i].name
+                });
+                $(form_group).append(col_lg_3);
+
+                var col_lg_3_2 = $('<div/>', {
+                    id:     '',
+                    class:  'col-lg-3'
+                });
+                $(form_group).append(col_lg_3_2);
+
+                    var select = $('<select/>', {
+                        id:     'selectObjects',
+                        class:  'form-control',
+                        onchange: 'selectObjects(this)'
+                    });
+                    $(col_lg_3_2).append(select);
+
+                        var option;
+
+                        for(var j = 0; j < issetObjects.length; j++){
+                                option = $('<option/>', {
+                                id:     '',
+                                class:  '',
+                                text: issetObjects[j].text
+                            });
+                            $(select).append(option);
+                        }
+
+
+
+            }
+
+
+
+
+
+        };
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    $('#submit').click(function(e){
+        e.preventDefault();
+       // alert(canvas.getContext());
+       // alert(canvas.getElement());
+        console.log(canvas._objects);
+       // console.log(canvas.getContext());
+       // console.log(canvas.getElement());
+
+    });
+
+    //$('#filesObjects').on('fileimageloaded', function(event) {
+    //
+    //
+    //});
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // клик по кнопке очистить изображения - доделать, чтоб менялись и свойства объектов
+    $('#filesObjects').on('filecleared', function(event) {
+        console.log("filecleared");
+
+        var clear = $('#insideInsertObject').children().remove();
+
+    });
+
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -209,3 +399,24 @@
 
 
     })();
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+* В этой области видимости определять функции для неотрендеренных dom элементов
+* */
+
+function selectObjects(e) {
+
+    //alert(e);
+    console.log(e);
+    console.log($(e).children(":selected").html()); // текст пункта меню
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////

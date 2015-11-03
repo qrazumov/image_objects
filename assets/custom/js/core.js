@@ -147,7 +147,7 @@ console.log(canvas.getActiveGroup());
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // рендерим холст, загружаем картинку
-    var wImg, hImg, canvas, changeScopeColor, changeNameScope;
+    var wImg, hImg, canvas, changeScopeColor, changeNameScope, img;
 
     // предзагрузка картинки
     var input = document.getElementById('InputImage');
@@ -158,7 +158,7 @@ console.log(canvas.getActiveGroup());
     fReader.readAsDataURL(input.files[0]);
     fReader.onloadend = function(event){ // действия, когда картика загрузилась
 
-    var img = document.createElement("img");
+    img = document.createElement("img");
     img.src = event.target.result;
 
     wImg = img.width;
@@ -499,20 +499,7 @@ console.log(canvas.getActiveGroup());
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    $('#submit').click(function(e){
-        e.preventDefault();
-       // alert(canvas.getContext());
-       // alert(canvas.getElement());
-        console.log(canvas._objects);
-       // console.log(canvas.getContext());
-       // console.log(canvas.getElement());
 
-    });
-
-    //$('#filesObjects').on('fileimageloaded', function(event) {
-    //
-    //
-    //});
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -546,6 +533,7 @@ console.log(canvas.getActiveGroup());
 
 
         console.log(JSON.stringify(canvas));
+        alert(JSON.stringify(canvas));
 
     });
 
@@ -553,11 +541,67 @@ console.log(canvas.getActiveGroup());
 
     // кликаем по кнопке отправить файл
     $('#submit').on('click', function(event) {
+
         console.log("submit");
         event.preventDefault();
         var fileinput_upload_button = $('.fileinput-upload-button');
-
+        // загрузили файлы объектов
         fileinput_upload_button.click();
+
+        // защита если файлы не загрузились #поменять
+        // загружаем фоновую картинку
+
+        function showResponse(responseText, statusText, xhr, $form)  {
+
+            console.log(responseText);
+
+        }
+
+        var options = {
+            // target:        '#output2',   // target element(s) to be updated with server response
+            // beforeSubmit:  showRequest,  // pre-submit callback
+            success:       showResponse,  // post-submit callback
+            data: {
+                test: 'test data'
+            },
+            // other available options:
+            //url:       url         // override for form's 'action' attribute
+            //type:      type        // 'get' or 'post', override for form's 'method' attribute
+            dataType:  'json'        // 'xml', 'script', or 'json' (expected server response type)
+            //clearForm: true        // clear all form fields after successful submit
+            //resetForm: true        // reset the form after successful submit
+            // $.ajax options can be used here too, for example:
+            //timeout:   3000
+        };
+
+        // сам запрос
+       // $('#addBgrImg').ajaxSubmit(options);
+
+        // если картинки областей не загрузились
+        //if(canvas.response != 'ok'){
+        //    console.log('canvas.response != ok');
+        //
+        //    return;
+        //}
+        var name =  document.getElementById('InputImage').files[0].name;
+        $.ajax({
+            type: 'POST',
+            url: 'ajax/addBgrImg',
+            data: {
+                'imgFile' : img.src,
+                'name' : name,
+                'json' : JSON.stringify(canvas)
+            },
+
+
+
+            success: function(result){ // результат запроса
+
+                console.log('загружено');
+                console.log(result);
+            }
+        });
+
 
     });
 
@@ -573,7 +617,14 @@ console.log(canvas.getActiveGroup());
 
     });
 
+    $('#filesObjects').on('filebatchuploadsuccess', function(event, data, previewId, index) {
+        var form = data.form, files = data.files, extra = data.extra,
+            response = data.response, reader = data.reader;
+        canvas.response = response;
+        console.log(response);
+    });
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

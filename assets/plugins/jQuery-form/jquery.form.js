@@ -72,7 +72,7 @@
     var hasProp = !!$.fn.prop;
 
 // attr2 uses prop when it can but checks the return type for
-// an expected string.  this accounts for the case where a form
+// an expected string.  this accounts for the case where a form 
 // contains inputs with names like "action" or "method"; in those
 // cases "prop" returns the element
     $.fn.attr2 = function() {
@@ -445,7 +445,7 @@
                 return deferred;
             }
 
-            // article submitting element to data if we know it
+            // add submitting element to data if we know it
             sub = form.clk;
             if (sub) {
                 n = sub.name;
@@ -553,7 +553,7 @@
                     }
                 }
 
-                // article "extra" data to form if provided in options
+                // add "extra" data to form if provided in options
                 var extraInputs = [];
                 try {
                     if (s.extraData) {
@@ -574,7 +574,7 @@
                     }
 
                     if (!s.iframeTarget) {
-                        // article iframe to doc and submit the form
+                        // add iframe to doc and submit the form
                         $io.appendTo('body');
                     }
                     if (io.attachEvent) {

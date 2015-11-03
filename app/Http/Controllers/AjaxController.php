@@ -63,6 +63,7 @@ class AjaxController extends Controller
                     Log::info('Успешно загружен ' . $i . ' файл');
                 }else{
                     Log::info('Ошибка загрузки ' . $i . ' файл');
+                    return response()->json(['error' => 'Произошла ошибка загрузки']);
                 }
 
 
@@ -75,4 +76,63 @@ class AjaxController extends Controller
       return response()->json('ok');
 
     }
+
+    /**
+     * Принимаем картинку фоновую на канвас
+     *
+     * @param Request $request
+     */
+    public function addBgrImg(Request $request){
+
+        $id = 0;
+        if(\DB::table('objects')->select('object_id')->get() == []){
+            $id = 1;
+        }else{
+            $id = \DB::table('objects')->max('object_id') + 1;
+        }
+
+        // Все загруженные файлы помещаются в эту папку
+        $uploaddir = 'C:/xampp/htdocs/objects-image/assets/objects/' .  $id . '/images/';
+        Log::info('Путь ' . $uploaddir);
+        // Вытаскиваем необходимые данные
+        $file = $_POST['imgFile'];
+        $name = $_POST['name'];
+        $json = $_POST['json'];
+
+        // Получаем расширение файла
+        $getMime = explode('.', $name);
+
+        // Выделим данные
+        $data = explode(',', $file);
+
+        // Декодируем данные, закодированные алгоритмом MIME base64
+        $encodedData = str_replace(' ','+',$data[1]);
+        $decodedData = base64_decode($encodedData);
+
+        // Вы можете использовать данное имя файла, или создать произвольное имя.
+        // Мы будем создавать произвольное имя!
+        //$randomName = substr_replace(sha1(microtime(true)), '', 12).'.'.$mime;
+
+        // Создаем изображение на сервере
+        if(file_put_contents($uploaddir . $name, $decodedData)) {
+            Log::info('Успешно загружен фон ' . $name . ' файл');
+        }
+        else {
+            // Показать сообщение об ошибке, если что-то пойдет не так.
+            Log::info('Ошибка загрузки фон ' . $name . ' файл');
+        }
+
+
+        return response()->json($json);
+
+    }
+
+    public function loadObject(Request $request){
+
+
+        return \DB::table('objects')->select('json')->where('object_id', '1')->get()[0]->json;
+
+
+    }
+
 }

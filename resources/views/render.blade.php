@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Objects in Image
+    Objects in Image | Edit object
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
         <section class="content-header">
           <h1>
             Objects in Image
-            <small>управление контентом</small>
+            <small>управление контентом отображение</small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
@@ -31,14 +31,6 @@
                     <form role="form">
                       <div class="box-body">
                         <div class="form-group">
-                          <label for="exampleInputFile">Выберите изображение:</label>
-                          <form id="addBgrImg" enctype="multipart/form-data" method="post" name="addBgrImg" action="{{ action('AjaxController@addBgrImg') }}" >
-                            <input type="file" id="InputImage" name="InputImage">
-                          </form>
-                          <p class="help-block">Параметры: ширина: до 1200px размер: до 1000КБ</p>
-                          <ul class="parsley-errors-list"></ul>
-                        </div>
-                        <div class="form-group">
                           <label for="exampleInputEmail1">Имя объекта:</label>
                           <input type="email" class="form-control " id="exampleInputEmail1" placeholder="имя объекта...">
                         </div>
@@ -46,9 +38,9 @@
 
                     </form>
 
-                   <div id="cMain" class="canvas_1">
+                       <div id="cMain" class="canvas_1">
 
-                   </div>
+                       </div>
 
                   </div>
 
@@ -61,38 +53,7 @@
                     </div><!-- /.box-header -->
                     <!-- form start -->
                       <div id="parametrsScope" class="box-body">
-
-                        {{--<div class="form-group">--}}
-                          {{--<label for="nameScope">Имя области:*</label>--}}
-                          {{--<input type="text" class="form-control" id="nameScope" placeholder="Введите имя области">--}}
-                        {{--</div>--}}
-
-                    {{--<div class="form-group">--}}
-                        {{--<label>Цвет области:</label>--}}
-                        {{--<div id="colorPickerScope" class="input-group colorpicker-element">--}}
-                          {{--<div class="input-group-addon">--}}
-                            {{--<i style="background-color: rgb(23, 183, 106);"></i>--}}
-                          {{--</div>--}}
-                          {{--<input type="text" class="form-control">--}}
-                        {{--</div>--}}
-                        {{--<!-- /.input group -->--}}
-                      {{--</div>--}}
-
-                        {{--<div class="form-group">--}}
-                             {{--<label>Прикрепить файлы к области:</label>--}}
-                              {{--<a class="btn btn-app" data-toggle="modal" data-target="#myModal">--}}
-                                {{--<i class="fa fa-edit"></i> + Изображение--}}
-                              {{--</a>--}}
-                              {{--<a class="btn btn-app">--}}
-                                {{--<i class="fa fa-edit"></i> + Текст--}}
-                              {{--</a>--}}
-                              {{--<a class="btn btn-app">--}}
-                                {{--<i class="fa fa-edit"></i> + Файл--}}
-                              {{--</a>--}}
-                          {{--</div>--}}
-
                       </div><!-- /.box-body -->
-
                       <div class="box-footer">
                         <button id="submit" type="submit" class="btn btn-primary">Submit</button>
                         <button id="toJSON" type="submit" class="btn btn-primary">toJSON</button>
@@ -102,7 +63,6 @@
 			</div>
 		</div>
 
-		
           <!-- Your Page Content Here -->
 
         </section><!-- /.content -->
@@ -155,12 +115,10 @@
     <script src="{{ asset('assets/plugins/fileinput/js/fileinput.js') }}" type="text/javascript"></script>
     <!-- colorpicker -->
     <script src="{{ asset('assets/plugins/colorpicker/bootstrap-colorpicker.js') }}" type="text/javascript"></script>
-    <!-- jquery.form.js -->
-    <script src="{{ asset('assets/plugins/jQuery-form/jquery.form.js') }}" type="text/javascript"></script>
 
 
     <!-- core application file -->
-    <script src="{{ asset('assets/custom/js/core.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/custom/js/coreRender.js') }}" type="text/javascript"></script>
 
 @endsection
 

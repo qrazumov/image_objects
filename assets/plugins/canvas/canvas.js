@@ -13421,6 +13421,12 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
      * @default
      */
     globalCompositeOperation: 'source-over',
+    // дополнительные свойства объектов
+    name: '',
+
+    files: '',
+
+    text: '',
 
     /**
      * Background color of an object. Only works with text objects at the moment.
@@ -13746,7 +13752,11 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
             clipTo:                   this.clipTo && String(this.clipTo),
             backgroundColor:          this.backgroundColor,
             fillRule:                 this.fillRule,
-            globalCompositeOperation: this.globalCompositeOperation
+            globalCompositeOperation: this.globalCompositeOperation,
+            // дополнительные свойства
+            name: this.name,
+            files: this.files,
+            text: this.text
           };
 
       if (!this.includeDefaultValues) {

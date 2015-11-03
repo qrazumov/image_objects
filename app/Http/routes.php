@@ -15,3 +15,7 @@
 Route::get('/', [
     'as' => 'index', 'uses' => 'IndexController@index'
 ]);
+// ajax routes
+Route::group(['as' => 'ajax::'], function () {
+    Route::post('ajax/addObject', ['as' => 'addObject', 'uses' => 'AjaxController@addObject']);
+});

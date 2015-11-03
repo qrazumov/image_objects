@@ -1089,7 +1089,7 @@
 				// ...then reset the day, keeping it in the new month
 				new_month = new_date.getUTCMonth();
 				new_date.setUTCDate(day);
-				test = function(){
+                addObjecttest = function(){
 					return new_month !== new_date.getUTCMonth();
 				};
 			}

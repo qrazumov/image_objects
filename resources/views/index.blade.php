@@ -93,6 +93,7 @@
 
                       <div class="box-footer">
                         <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                        <button id="toJSON" type="submit" class="btn btn-primary">toJSON</button>
                       </div>
                   </div>
 
@@ -116,13 +117,15 @@
                         <p>One fine body…</p>
 
                 <hr>
-                 <div class="form-group">
-                    <input id="filesObjects" class="file" type="file" multiple data-preview-file-type="any" data-upload-url="#">
-                </div>
+                 <form enctype="multipart/form-data">
+                     <div class="form-group">
+                        <input id="filesObjects" class="file" type="file" multiple name="scope_files[]">
+                    </div>
+                </form>
                 <div class="test">
                     <div class="box box-solid box-success">
                       <div class="box-header with-border">
-                        <h3 class="box-title">Укажите соответствие: объект:файл</h3>
+                        <h3 class="box-title">Укажите соответствие: файл:область</h3>
                         <div class="box-tools pull-right">
                           <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         </div><!-- /.box-tools -->

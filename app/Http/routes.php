@@ -15,15 +15,21 @@
 Route::get('/', [
     'as' => 'index', 'uses' => 'IndexController@index'
 ]);
-// главаня
-Route::get('/render', [
-    'as' => 'render', 'uses' => 'IndexController@render'
-]);
 
+// группа object
+Route::group(['as' => 'object::'], function () {
+ //   Route::get('object', ['as' => 'object', 'uses' => 'IndexController@object']);
+    Route::get('object/{id}', ['as' => 'object_id', 'uses' => 'IndexController@object_id'])->where('id', '[0-9]+');
+
+
+
+
+});
 
 // ajax routes
 Route::group(['as' => 'ajax::'], function () {
     Route::post('ajax/addObject', ['as' => 'addObject', 'uses' => 'AjaxController@addObject']);
     Route::post('ajax/addBgrImg', ['as' => 'addBgrImg', 'uses' => 'AjaxController@addBgrImg']);
     Route::post('ajax/loadObject', ['as' => 'loadObject', 'uses' => 'AjaxController@loadObject']);
+    Route::get('ajax/delFile', ['as' => 'delFile', 'uses' => 'AjaxController@delFile']);
 });

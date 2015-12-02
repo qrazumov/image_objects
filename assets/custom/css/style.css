@@ -58,3 +58,13 @@ select.parsley-error {
     width: 700px;
     height: 525px;
 }
+
+.deleteFileDisabled{
+
+    background-color: #fff;
+    border-color: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: .65;
+
+}

@@ -29,19 +29,18 @@
                     </div><!-- /.box-header -->
                     <!-- form start -->
                     <form role="form">
-                      <div class="box-body">
+                      <div id="workingArea" class="box-body">
                         <div class="form-group">
                           <label for="exampleInputFile">Выберите изображение:</label>
                           <form id="addBgrImg" enctype="multipart/form-data" method="post" name="addBgrImg" action="{{ action('AjaxController@addBgrImg') }}" >
-                            <input type="file" id="InputImage" name="InputImage">
+                            <input  class="file" type="file" id="InputImage" name="InputImage" >
                           </form>
                           <p class="help-block">Параметры: ширина: до 1200px размер: до 1000КБ</p>
                           <ul class="parsley-errors-list"></ul>
                         </div>
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Имя объекта:</label>
-                          <input type="email" class="form-control " id="exampleInputEmail1" placeholder="имя объекта...">
-                        </div>
+
+
+
                       </div><!-- /.box-body -->
 
                     </form>
@@ -49,6 +48,14 @@
                    <div id="cMain" class="canvas_1">
 
                    </div>
+                <div class="box-body pad">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Имя объекта*:</label>
+                          <input id="nameObject" type="email" class="form-control " id="exampleInputEmail1" placeholder="имя объекта...">
+                        </div>
+                <label for="exampleInputFile">Описание объекта:</label>
+                    <textarea id="objectDescription"  rows="10" cols="80" placeholder="Описание объекта..."></textarea>
+                </div>
 
                   </div>
 
@@ -62,40 +69,17 @@
                     <!-- form start -->
                       <div id="parametrsScope" class="box-body">
 
-                        {{--<div class="form-group">--}}
-                          {{--<label for="nameScope">Имя области:*</label>--}}
-                          {{--<input type="text" class="form-control" id="nameScope" placeholder="Введите имя области">--}}
-                        {{--</div>--}}
-
-                    {{--<div class="form-group">--}}
-                        {{--<label>Цвет области:</label>--}}
-                        {{--<div id="colorPickerScope" class="input-group colorpicker-element">--}}
-                          {{--<div class="input-group-addon">--}}
-                            {{--<i style="background-color: rgb(23, 183, 106);"></i>--}}
-                          {{--</div>--}}
-                          {{--<input type="text" class="form-control">--}}
-                        {{--</div>--}}
-                        {{--<!-- /.input group -->--}}
-                      {{--</div>--}}
-
-                        {{--<div class="form-group">--}}
-                             {{--<label>Прикрепить файлы к области:</label>--}}
-                              {{--<a class="btn btn-app" data-toggle="modal" data-target="#myModal">--}}
-                                {{--<i class="fa fa-edit"></i> + Изображение--}}
-                              {{--</a>--}}
-                              {{--<a class="btn btn-app">--}}
-                                {{--<i class="fa fa-edit"></i> + Текст--}}
-                              {{--</a>--}}
-                              {{--<a class="btn btn-app">--}}
-                                {{--<i class="fa fa-edit"></i> + Файл--}}
-                              {{--</a>--}}
-                          {{--</div>--}}
-
+                    <div id="startCalloutScopesSetting" class="callout callout-warning">
+                        <h4>Добавьте область</h4>
+                        <p>И Вам откроются соответствующие настроийки</p>
+                      </div>
                       </div><!-- /.box-body -->
 
                       <div class="box-footer">
-                        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-                        <button id="toJSON" type="submit" class="btn btn-primary">toJSON</button>
+                        <button id="clearCanvas" class="btn btn-block btn-danger btn-xs disabled">Очистить холст</button>
+                        <button id="submit" class="btn btn-block btn-success btn-lg disabled">Submit</button>
+                        {{--<button id="submit" type="submit" class="btn btn-primary">Submit</button>--}}
+                        {{--<button id="toJSON" type="submit" class="btn btn-primary">toJSON</button>--}}
                       </div>
                   </div>
 
@@ -157,7 +141,10 @@
     <script src="{{ asset('assets/plugins/colorpicker/bootstrap-colorpicker.js') }}" type="text/javascript"></script>
     <!-- jquery.form.js -->
     <script src="{{ asset('assets/plugins/jQuery-form/jquery.form.js') }}" type="text/javascript"></script>
-
+    <!-- ckeditor -->
+    <script src="{{ asset('assets/plugins/ckeditor/ckeditor.js') }}" type="text/javascript"></script>
+    <!-- select2.full.min.js -->
+    <script src="{{ asset('assets/plugins/select2/select2.full.min.js') }}" type="text/javascript"></script>
 
     <!-- core application file -->
     <script src="{{ asset('assets/custom/js/core.js') }}" type="text/javascript"></script>
@@ -171,5 +158,6 @@
     <link href="{{ asset('assets/plugins/fileinput/css/fileinput.css') }}" rel="stylesheet" type="text/css" />
     <!-- colorpicker -->
     <link href="{{ asset('assets/plugins/colorpicker/bootstrap-colorpicker.css') }}" rel="stylesheet" type="text/css" />
-
+    <!-- select2 -->
+    <link href="{{ asset('assets/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection

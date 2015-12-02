@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Object;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -17,6 +18,24 @@ use Illuminate\Support\Facades\DB;
 
 class AjaxController extends Controller
 {
+    /**
+     * Создаем новую папку для объекта
+     *
+     */
+    protected function createObjectFolder(){
+
+        if(\DB::table('objects')->select('id')->get() == []){
+            $id = 1;
+        }else{
+            $id = \DB::table('objects')->max('id') + 1;
+        }
+        // создаем папку с нашим объектом
+        Storage::makeDirectory($id . '/files');
+
+        return $id;
+
+    }
+
     /**
      * Принимает файлы на вход для сохранения объекта, сохраняет и возвращает json ответ
      *
@@ -49,17 +68,12 @@ class AjaxController extends Controller
 
 
 
-            if(\DB::table('objects')->select('object_id')->get() == []){
-                $id = 1;
-            }else{
-                $id = \DB::table('objects')->max('object_id') + 1;
-            }
-            // создаем папку с нашим объектом
-            Storage::makeDirectory($id . '/images');
+
+            $id = $this->createObjectFolder();
 
             for($i = 0; $i < count($_FILES["scope_files"]['name']); $i++){
                 // это локальные пути, на сервере поменяю #поменять
-                if (move_uploaded_file($_FILES["scope_files"]['tmp_name'][$i], 'C:/xampp/htdocs/objects-image/assets/objects/' .  $id . '/images/' . $_FILES["scope_files"]['name'][$i])) {
+                if (move_uploaded_file($_FILES["scope_files"]['tmp_name'][$i], 'C:/xampp/htdocs/objects-image/assets/objects/' .  $id . '/files/' . $_FILES["scope_files"]['name'][$i])) {
                     Log::info('Успешно загружен ' . $i . ' файл');
                 }else{
                     Log::info('Ошибка загрузки ' . $i . ' файл');
@@ -84,20 +98,25 @@ class AjaxController extends Controller
      */
     public function addBgrImg(Request $request){
 
-        $id = 0;
-        if(\DB::table('objects')->select('object_id')->get() == []){
-            $id = 1;
-        }else{
-            $id = \DB::table('objects')->max('object_id') + 1;
-        }
 
-        // Все загруженные файлы помещаются в эту папку
-        $uploaddir = 'C:/xampp/htdocs/objects-image/assets/objects/' .  $id . '/images/';
+       // dd($json . ' | ' . $objectDescription . ' | ' . $ObjectName . ' | ');
+
+//        $id = 0;
+//        if(\DB::table('objects')->select('id')->get() == []){
+//            $id = 1;
+//        }else{
+//            $id = \DB::table('objects')->max('id') + 1;
+//        }
+        $id = $this->createObjectFolder();
+
+        // Все загруженные файлы помещаются в эту папку #поменять
+        $uploaddir = 'C:/xampp/htdocs/objects-image/assets/objects/' .  $id . '/files/';
         Log::info('Путь ' . $uploaddir);
         // Вытаскиваем необходимые данные
         $file = $_POST['imgFile'];
         $name = $_POST['name'];
-        $json = $_POST['json'];
+//        $json = $_POST['json'];
+//        $ObjectName = $_POST['ObjectName'];
 
         // Получаем расширение файла
         $getMime = explode('.', $name);
@@ -122,15 +141,86 @@ class AjaxController extends Controller
             Log::info('Ошибка загрузки фон ' . $name . ' файл');
         }
 
+        $json = $request->get('json');
+        $objectDescription = $request->get('objectDescription');
+        $ObjectName = $request->get('ObjectName');
 
-        return response()->json($json);
+        // попытка добавить объект
+        try{
+            $query = Object::create([
+                'author_id' => '1', // #поменять
+                'description' => $objectDescription,
+                'json' => $json,
+                'name' => $ObjectName,
+            ]);
+
+            return \Response::json($query);
+
+            // если ошибка, ловим ее и возвращаем error
+        } catch(\Exception $e){
+            return response()->json(['error' => true, 'reason' => $e->getMessage() . ' строка ' . $e->getLine()]);
+        }
+
+
+
+
+
+//        return response()->json($ObjectName);
+        //return $ObjectName;
 
     }
 
     public function loadObject(Request $request){
 
+        $id = $request->get('id');
 
-        return \DB::table('objects')->select('json')->where('object_id', '1')->get()[0]->json;
+        $size = [];
+        $files = Storage::files($id . '/files/');
+
+        foreach ($files as $k => $f) {
+            $size[$k] = Storage::size($f);
+        }
+
+
+       // dd($size);
+
+        return response()->json(['json' => \DB::table('objects')->select('json')->where('id', $id)->get()[0]->json, 'files' => $size]);
+
+       // return \DB::table('objects')->select('json')->where('id', $id)->get()[0]->json;
+
+
+    }
+
+    public function delFile(Request $request){
+
+        // валидация на сервера
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|string|max:10000',
+            'id' => 'required|string|max:100',
+        ]);
+
+        if($validator->fails())
+        {
+            $error = $validator->errors()->all();
+
+            return response()->json(['error' => true, 'reason' => $error]);
+        }
+
+        $file = $request->get('file');
+        $id = $request->get('id');
+
+        try{
+
+            Storage::delete($id . '/files/' . $file);
+
+        }catch(\Exception $e){
+
+            return response()->json(['error' => true, 'reason' => $e->getMessage()]);
+
+        }
+
+
+
 
 
     }
